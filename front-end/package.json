@@ -19,7 +19,7 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "eslint-plugin-vue": "8.5.0",
-    "naive-ui": "^2.26.4",
+    "naive-ui": "2.26.4",
     "vite": "2.8.6"
   }
 }
