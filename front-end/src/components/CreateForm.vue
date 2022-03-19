@@ -17,7 +17,7 @@ export default {
   },
   data () {
     return {
-      idmethod: 'smartid'
+      method: 'smart-id'
     }
   }
 }
@@ -28,7 +28,7 @@ export default {
   <n-grid cols="4">
     <n-gi span="4">
       <n-space vertical>
-        Selected method {{ idmethod }}.
+        Selected method {{ method }}.
         <n-input
           v-model:value="pealkiri"
           type="text"
@@ -54,17 +54,18 @@ export default {
             hidden="true"
           />
           <n-radio-group
-            v-model:value="idmethod"
-            name="idmethod"
+            v-model:value="method"
+            name="method"
             style="margin-bottom: 12px"
           >
-            <n-radio-button
-              value="mid"
-            >
+            <n-radio-button value="mobile-id">
               Mobiil-ID
             </n-radio-button>
-            <n-radio-button value="smartid">
+            <n-radio-button value="smart-id">
               Smart-ID
+            </n-radio-button>
+            <n-radio-button value="id-card">
+              ID kaart
             </n-radio-button>
           </n-radio-group>
           <n-button
