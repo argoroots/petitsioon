@@ -94,31 +94,37 @@ export default {
                 hidden="true"
               />
             </n-form-item>
-            <n-radio-group
-              v-model:value="dok.method"
-              name="method"
-              style="margin-bottom: 12px"
+            <n-form-item
+              label="Vali allkirjastusmeetod"
+              path="dok.telefon"
+              show-require-mark
             >
-              <n-radio-button value="id-card">
-                ID kaart
-              </n-radio-button>
-              <n-radio-button value="mobile-id">
-                Mobiil-ID
-              </n-radio-button>
-              <n-radio-button value="smart-id">
-                Smart-ID
-              </n-radio-button>
-            </n-radio-group>
-            <n-button
-              :disabled="dok.pealkiri === '' || dok.sisu === ''"
-              round
-              type="primary"
-              value="mid"
-              @click="handleSignButtonClick(dok)"
-            >
-              Allkirjasta
-            </n-button>
+              <n-radio-group
+                v-model:value="dok.method"
+                name="method"
+                style="margin-bottom: 12px"
+              >
+                <n-radio-button value="id-card">
+                  ID kaart
+                </n-radio-button>
+                <n-radio-button value="mobile-id">
+                  Mobiil-ID
+                </n-radio-button>
+                <n-radio-button value="smart-id">
+                  Smart-ID
+                </n-radio-button>
+              </n-radio-group>
+            </n-form-item>
           </n-space>
+          <n-button
+            :disabled="dok.pealkiri === '' || dok.sisu === ''"
+            round
+            type="primary"
+            value="mid"
+            @click="handleSignButtonClick(dok)"
+          >
+            Allkirjasta
+          </n-button>
         </n-space>
       </n-form>
       <pre>{{ JSON.stringify(dok, null, 2) }}</pre>
