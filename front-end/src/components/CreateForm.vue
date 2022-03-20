@@ -24,8 +24,25 @@ export default {
         pealkiri: '',
         sisu: ''
       },
-      handleSignButtonClick (dok) {
-        console.log(JSON.stringify(dok, null, 2))
+      handleSignButtonClick (params) {
+        console.log(JSON.stringify(params, null, 2))
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = '/sign'
+
+        for (const key in params) {
+          if (params.hasOwnProperty(key)) {
+            const hiddenField = document.createElement('input')
+            hiddenField.type = 'hidden'
+            hiddenField.name = key
+            hiddenField.value = params[key]
+
+            form.appendChild(hiddenField)
+          }
+        }
+
+        document.body.appendChild(form)
+        form.submit()
       }
     }
   }
