@@ -16,5 +16,9 @@ import CreateForm from './components/CreateForm.vue'
   margin-top: 60px;
   padding: 1em 8em;
 }
+pre {
+  text-align: left;
+  padding: 1em;
+}
 
 </style>
