@@ -1,51 +1,39 @@
-<script>
+<script setup>
+import { ref } from 'vue'
+
 import {
   NSpace, NGrid, NGi,
   NForm, NFormItem, NRadioGroup, NRadioButton,
   NButton, NInput
 } from 'naive-ui'
 
-export default {
-  components: {
-    NSpace,
-    NGrid,
-    NGi,
-    NForm,
-    NFormItem,
-    NRadioGroup,
-    NRadioButton,
-    NButton,
-    NInput
-  },
-  data () {
-    return {
-      dok: {
-        method: 'smart-id',
-        pealkiri: '',
-        sisu: ''
-      },
-      handleSignButtonClick (params) {
-        console.log(JSON.stringify(params, null, 2))
-        const form = document.createElement('form')
-        form.method = 'POST'
-        form.action = '/sign'
+console.log('hello script setup')
 
-        for (const key in params) {
-          if (params.hasOwnProperty(key)) {
-            const hiddenField = document.createElement('input')
-            hiddenField.type = 'hidden'
-            hiddenField.name = key
-            hiddenField.value = params[key]
+const dok = ref({
+  method: 'smart-id',
+  pealkiri: '',
+  sisu: ''
+})
 
-            form.appendChild(hiddenField)
-          }
-        }
+function handleSignButtonClick (params) {
+  console.log(JSON.stringify(params, null, 2))
+  const form = document.createElement('form')
+  form.method = 'POST'
+  form.action = '/sign'
 
-        document.body.appendChild(form)
-        form.submit()
-      }
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const hiddenField = document.createElement('input')
+      hiddenField.type = 'hidden'
+      hiddenField.name = key
+      hiddenField.value = params[key]
+
+      form.appendChild(hiddenField)
     }
   }
+
+  document.body.appendChild(form)
+  form.submit()
 }
 
 </script>
