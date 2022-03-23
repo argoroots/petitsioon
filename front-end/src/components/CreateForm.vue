@@ -15,120 +15,120 @@ const dok = ref({
   sisu: ''
 })
 
-function handleSignButtonClick (params) {
-  console.log(JSON.stringify(params, null, 2))
-  const form = document.createElement('form')
-  form.method = 'POST'
-  form.action = '/sign'
+async function handleSignButtonClick () {
+  const response = await fetch(import.meta.env.VITE_APP_API_URL, {
+    method: 'POST',
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: { 'Content-Type': 'application/json' },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(dok.value)
+  }).then(resp => resp.json())
 
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
-      const hiddenField = document.createElement('input')
-      hiddenField.type = 'hidden'
-      hiddenField.name = key
-      hiddenField.value = params[key]
-
-      form.appendChild(hiddenField)
-    }
-  }
-
-  document.body.appendChild(form)
-  form.submit()
+  console.table(response)
 }
 
 </script>
 
 <template>
-  <n-grid cols="4">
-    <n-gi span="4">
-      <n-form
-        ref="formRef"
-        inline
-        :label-width="80"
-        :model="dok"
+  <n-form
+    ref="formRef"
+    inline
+    :label-width="80"
+    :model="dok"
+  >
+    <n-space vertical>
+      <n-form-item
+        label="Pealkiri"
+        path="pealkiri"
       >
-        <n-space vertical>
-          <n-form-item
-            label="Pealkiri"
-            path="dok.pealkiri"
-          >
-            <n-input
-              v-model:value="dok.pealkiri"
-              type="text"
-              placeholder="Pealkiri"
-              @keydown.enter.prevent
-            />
-          </n-form-item>
-          <n-form-item
-            label="Sisu"
-            path="dok.sisu"
-          >
-            <n-input
-              v-model:value="dok.sisu"
-              type="textarea"
-              placeholder="Sisu"
-              rows="5"
-            />
-          </n-form-item>
+        <n-input
+          v-model:value="dok.pealkiri"
+          type="text"
+          placeholder=""
+        />
+      </n-form-item>
+      <n-form-item
+        label="Sisu"
+        path="sisu"
+      >
+        <n-input
+          v-model:value="dok.sisu"
+          type="textarea"
+          placeholder=""
+          rows="5"
+        />
+      </n-form-item>
 
-          <n-space horizontal>
-            <n-form-item
-              label="Vali allkirjastusmeetod"
-              path="dok.telefon"
-            >
-              <n-radio-group
-                v-model:value="dok.method"
-                name="method"
-                style="margin-bottom: 12px"
-              >
-                <n-radio-button value="id-card">
-                  ID kaart
-                </n-radio-button>
-                <n-radio-button value="mobile-id">
-                  Mobiil-ID
-                </n-radio-button>
-                <n-radio-button value="smart-id">
-                  Smart-ID
-                </n-radio-button>
-              </n-radio-group>
-            </n-form-item>
-            <div v-show="dok.method === 'mobile-id'">
-              <n-form-item
-                label="Telefon"
-                path="dok.telefon"
-              >
-                <n-input
-                  v-model:value="dok.telefon"
-                  type="text"
-                  placeholder="Telefon"
-                />
-              </n-form-item>
-            </div>
-            <div v-show="dok.method === 'smart-id'">
-              <n-form-item
-                label="Isikukood"
-                path="dok.isikukood"
-              >
-                <n-input
-                  v-model:value="dok.isikukood"
-                  type="text"
-                  placeholder="Isikukood"
-                />
-              </n-form-item>
-            </div>
-          </n-space>
-          <n-button
-            :disabled="dok.pealkiri === ''
-              || dok.sisu === ''"
-            round
-            type="primary"
-            value="mid"
-            @click="handleSignButtonClick(dok)"
+      <n-space horizontal>
+        <n-form-item label="Allkirjastusmeetod">
+          <n-radio-group
+            v-model:value="dok.method"
+            name="method"
           >
-            Allkirjasta
-          </n-button>
-        </n-space>
-      </n-form>
-    </n-gi>
-  </n-grid>
+            <n-radio-button value="id-card">
+              ID kaart
+            </n-radio-button>
+            <n-radio-button value="smart-id">
+              Smart-ID
+            </n-radio-button>
+            <n-radio-button value="mobile-id">
+              Mobiil-ID
+            </n-radio-button>
+          </n-radio-group>
+        </n-form-item>
+        <div v-show="dok.method === 'smart-id' || dok.method === 'mobile-id'">
+          <n-form-item
+            label="Isikukood"
+            path="isikukood"
+          >
+            <n-input
+              v-model:value="dok.isikukood"
+              type="text"
+              placeholder=""
+            />
+          </n-form-item>
+        </div>
+        <div v-show="dok.method === 'mobile-id'">
+          <n-form-item
+            label="Telefon"
+            path="telefon"
+          >
+            <n-input
+              v-model:value="dok.telefon"
+              type="text"
+              placeholder=""
+            />
+          </n-form-item>
+        </div>
+      </n-space>
+      <n-button
+        :disabled="dok.pealkiri === ''
+          || dok.sisu === ''
+          || (dok.method === 'smart-id'
+            && (dok.isikukood === undefined
+              || !dok.isikukood.match('^[0-9]{11}$')))
+          || (dok.method === 'mobile-id'
+            && (dok.telefon === undefined
+              || !dok.telefon.match('^[0-9 (+)]{7,}$')))"
+        round
+        type="primary"
+        value="mid"
+        @click="handleSignButtonClick()"
+      >
+        Allkirjasta
+      </n-button>
+    </n-space>
+  </n-form>
 </template>
+
+<style scoped>
+  .n-form {
+    margin: 3rem auto;
+    max-width: 40rem;
+    width: 90%;
+    display: block;
+  }
+</style>
