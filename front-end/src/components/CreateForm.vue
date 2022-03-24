@@ -16,18 +16,15 @@ const dok = ref({
 })
 
 async function handleSignButtonClick () {
-  const response = await fetch(import.meta.env.VITE_APP_API_URL, {
+  console.log(dok.value)
+  fetch(import.meta.env.VITE_APP_API_URL, {
     method: 'POST',
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: { 'Content-Type': 'application/json' },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(dok.value)
-  }).then(resp => resp.json())
-
-  console.table(response)
+    mode: 'no-cors', // no-cors, *cors, same-origin
+    body: '{}'
+  }).then(resp => {
+    console.log('FOO')
+    console.table(resp)
+  })
 }
 
 </script>
