@@ -21,7 +21,16 @@ async function handleSignButtonClick () {
     method: 'POST',
     body: JSON.stringify(dok.value)
   }).then(resp => resp.json())
-  console.log(response)
+  console.log({ '1st': response })
+  setTimeout(checkForSignature, 1000, response.sessionId)
+}
+
+async function checkForSignature (sessId) {
+  const response = await fetch(import.meta.env.VITE_APP_API_URL, {
+    method: 'POST',
+    body: JSON.stringify({ sessionId: sessId })
+  }).then(resp => resp.json())
+  console.log({ '2nd': response })
 }
 
 </script>
