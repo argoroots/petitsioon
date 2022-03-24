@@ -17,14 +17,11 @@ const dok = ref({
 
 async function handleSignButtonClick () {
   console.log(dok.value)
-  fetch(import.meta.env.VITE_APP_API_URL, {
+  const response = await fetch(import.meta.env.VITE_APP_API_URL, {
     method: 'POST',
-    mode: 'no-cors', // no-cors, *cors, same-origin
-    body: '{}'
-  }).then(resp => {
-    console.log('FOO')
-    console.table(resp)
-  })
+    body: JSON.stringify(dok.value)
+  }).then(resp => resp.json())
+  console.log(response)
 }
 
 </script>
