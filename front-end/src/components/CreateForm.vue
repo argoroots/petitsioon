@@ -22,15 +22,26 @@ async function handleSignButtonClick () {
     body: JSON.stringify(dok.value)
   }).then(resp => resp.json())
   console.log({ '1st': response })
-  setTimeout(checkForSignature, 1000, response.sessionId)
+  setTimeout(checkForSignature, 7000, response.sessionId, 30)
 }
 
-async function checkForSignature (sessId) {
+async function checkForSignature (sessId, retries) {
+  if (retries === 0) {
+    console.log('timed out')
+    return
+  }
+  retries--
+
   const response = await fetch(import.meta.env.VITE_APP_API_URL, {
     method: 'POST',
     body: JSON.stringify({ sessionId: sessId })
   }).then(resp => resp.json())
-  console.log({ '2nd': response })
+  if (response.key) {
+    console.log({ 'Got-a-key': response })
+  } else {
+    console.log({ 'check-again': response })
+    setTimeout(checkForSignature, 2000, response.sessionId, retries)
+  }
 }
 
 </script>
