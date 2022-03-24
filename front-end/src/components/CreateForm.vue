@@ -22,7 +22,11 @@ async function handleSignButtonClick () {
     body: JSON.stringify(dok.value)
   }).then(resp => resp.json())
   console.log({ '1st': response })
-  setTimeout(checkForSignature, 7000, response.sessionId, 30)
+  if (response.sessionId) {
+    setTimeout(checkForSignature, 7000, response.sessionId, 30)
+  } else {
+    console.error('something went awry')
+  }
 }
 
 async function checkForSignature (sessId, retries) {
@@ -38,9 +42,11 @@ async function checkForSignature (sessId, retries) {
   }).then(resp => resp.json())
   if (response.key) {
     console.log({ 'Got-a-key': response })
-  } else {
+  } else if (response.sessionId) {
     console.log({ 'check-again': response })
     setTimeout(checkForSignature, 2000, response.sessionId, retries)
+  } else {
+    console.error('something went awry')
   }
 }
 
